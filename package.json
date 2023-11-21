@@ -11,7 +11,7 @@
     "checkAll": "npm run check && npm run lint",
     "fixAll": "npm run format && npm run lintfix",
     "fixAndPush": "npm run fixAll && git add . && git commit -m 'prepared for publication' && git push",
-    "build": "rm -rf dist && webpack --mode production",
+    "build": "webpack --mode production",
     "dev": "webpack serve"
   },
   "author": "McCrog",
@@ -20,6 +20,8 @@
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "babel-loader": "^9.1.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "html-webpack-plugin": "^5.5.3",
     "prettier": "^3.0.3",
     "stylelint": "^15.10.3",
     "stylelint-order": "^6.0.3",
