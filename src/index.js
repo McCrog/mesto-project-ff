@@ -1,7 +1,6 @@
 import '../pages/index.css';
 import { initialCards } from './cards.js';
 
-import avatarImage from '../images/avatar.jpg';
 import cardOneImage from '../images/card_1.jpg';
 import cardTwoImage from '../images/card_2.jpg';
 import cardThreeImage from '../images/card_3.jpg';
