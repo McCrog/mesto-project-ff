@@ -1,0 +1,27 @@
+{
+  "name": "mesto-project",
+  "version": "1.0.0",
+  "description": "https://github.com/McCrog/mesto-project-ff",
+  "main": "index.js",
+  "scripts": {
+    "check": "prettier --check './**/*.{html,css,js}'",
+    "format": "prettier --write './**/*.{html,css,js}'",
+    "lint": "stylelint '**/*.css'",
+    "lintfix": "stylelint '**/*.css' --fix",
+    "checkAll": "npm run check && npm run lint",
+    "fixAll": "npm run format && npm run lintfix",
+    "fixAndPush": "npm run fixAll && git add . && git commit -m 'prepared for publication' && git push",
+    "build": "rm -rf dist && webpack --mode production",
+    "dev": "webpack serve"
+  },
+  "author": "McCrog",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "stylelint": "^15.10.3",
+    "stylelint-order": "^6.0.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
