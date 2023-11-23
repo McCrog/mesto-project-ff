@@ -64,14 +64,14 @@ profileEditButton.addEventListener('click', () => {
     profileTitle.textContent,
     profileDescription.textContent,
     (newData) => {
-      profileTitle.textContent = newData.name;
-      profileDescription.textContent = newData.job;
+      profileTitle.textContent = newData.firstValue;
+      profileDescription.textContent = newData.secondValue;
     },
   );
 });
 
 profileAddButton.addEventListener('click', () => {
   popup.showAdd(popupTypeNewCard, (newData) => {
-    addCard(newData, true);
+    addCard({ name: newData.firstValue, link: newData.secondValue }, true);
   });
 });

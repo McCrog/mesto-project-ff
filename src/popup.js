@@ -23,6 +23,22 @@ const popup = (function () {
     }
   }
 
+  function setupSubmitForm(firstInput, secondInput, updateDataCallback) {
+    const formElement = _popupElement.querySelector('.popup__form');
+    formElement.addEventListener('submit', handleFormSubmit);
+
+    function handleFormSubmit(evt) {
+      evt.preventDefault();
+      updateDataCallback({
+        firstValue: firstInput.value,
+        secondValue: secondInput.value,
+      });
+      formElement.removeEventListener('submit', handleFormSubmit);
+      formElement.reset();
+      handlePopupClose();
+    }
+  }
+
   return {
     show: function (popupElement) {
       _popupElement = popupElement;
@@ -46,41 +62,25 @@ const popup = (function () {
     },
     showEdit: function (popupElement, name, job, updateDataCallback) {
       _popupElement = popupElement;
-      const formElement = _popupElement.querySelector('.popup__form');
       const nameInput = _popupElement.querySelector('.popup__input_type_name');
       const jobInput = _popupElement.querySelector(
         '.popup__input_type_description',
       );
       nameInput.value = name;
       jobInput.value = job;
-      formElement.addEventListener('submit', handleFormSubmit);
 
-      function handleFormSubmit(evt) {
-        evt.preventDefault();
-        updateDataCallback({ name: nameInput.value, job: jobInput.value });
-        formElement.removeEventListener('submit', handleFormSubmit);
-        formElement.reset();
-        handlePopupClose();
-      }
+      setupSubmitForm(nameInput, jobInput, updateDataCallback);
 
       this.show(_popupElement);
     },
     showAdd: function (popupElement, updateDataCallback) {
       _popupElement = popupElement;
-      const formElement = _popupElement.querySelector('.popup__form');
       const nameInput = _popupElement.querySelector(
         '.popup__input_type_card-name',
       );
       const linkInput = _popupElement.querySelector('.popup__input_type_url');
-      formElement.addEventListener('submit', handleFormSubmit);
 
-      function handleFormSubmit(evt) {
-        evt.preventDefault();
-        updateDataCallback({ name: nameInput.value, link: linkInput.value });
-        formElement.removeEventListener('submit', handleFormSubmit);
-        formElement.reset();
-        handlePopupClose();
-      }
+      setupSubmitForm(nameInput, linkInput, updateDataCallback);
 
       this.show(_popupElement);
     },
