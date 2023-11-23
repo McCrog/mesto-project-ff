@@ -1,6 +1,5 @@
-const POPUP_IS_OPENED_CLASS = 'popup_is-opened';
-
 const popup = (function () {
+  const POPUP_IS_OPENED_CLASS = 'popup_is-opened';
   let _popupElement;
 
   function handlePopupClose() {

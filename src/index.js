@@ -3,10 +3,6 @@ import { createCard, deleteCard, likeCard } from './components/card.js';
 import { initialCards } from './components/cards.js';
 import { popup } from './components/modal.js';
 
-import cardOneImage from './images/card_1.jpg';
-import cardTwoImage from './images/card_2.jpg';
-import cardThreeImage from './images/card_3.jpg';
-
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
