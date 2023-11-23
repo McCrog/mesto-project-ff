@@ -13,10 +13,11 @@ function createCard(
   const cardDeleteButton = card.querySelector('.card__delete-button');
   const cardLikeButton = card.querySelector('.card__like-button');
 
-  cardImage.title = cardItem.name;
   cardImage.src = cardItem.link;
   cardImage.alt = cardImageAlt;
-  cardImage.addEventListener('click', showImagePopupCallback);
+  cardImage.addEventListener('click', () => {
+    showImagePopupCallback(cardItem.name, cardItem.link, cardImageAlt);
+  });
 
   cardTitle.textContent = cardItem.name;
 
