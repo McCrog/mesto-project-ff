@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { showCards, addCard } from './components/card.js';
-import { popup } from './components/popup.js';
+import { popup } from './components/modal.js';
 
 import cardOneImage from './images/card_1.jpg';
 import cardTwoImage from './images/card_2.jpg';
