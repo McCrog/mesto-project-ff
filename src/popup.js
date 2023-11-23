@@ -42,7 +42,7 @@ const popup = (function () {
   return {
     show: function (popupElement) {
       _popupElement = popupElement;
-      popupElement.classList.add(POPUP_IS_OPENED_CLASS);
+      _popupElement.classList.add(POPUP_IS_OPENED_CLASS);
 
       const popupClose = _popupElement.querySelector('.popup__close');
       popupClose.addEventListener('click', handlePopupClose);
