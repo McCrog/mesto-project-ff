@@ -29,6 +29,16 @@ const popup = (function () {
         }
       }
     },
+    showImage: function (popupElement, name, link, alt) {
+      const popupImage = popupElement.querySelector('.popup__image');
+      const popupImageName = popupElement.querySelector('.popup__caption');
+
+      popupImage.src = link;
+      popupImage.alt = alt;
+      popupImageName.textContent = name;
+
+      this.show(popupElement);
+    },
   };
 })();
 
