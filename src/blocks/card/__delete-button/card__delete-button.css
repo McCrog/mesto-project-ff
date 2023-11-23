@@ -7,8 +7,7 @@
   margin: 0;
   border: none;
   padding: 0;
-  background: transparent url(../../../images/delete-icon.svg) center
-    no-repeat;
+  background: transparent url(../../../images/delete-icon.svg) center no-repeat;
   /*Потом это будет из модификатора*/
   background-size: 18px 18px;
   -webkit-transition: 0.3s;
