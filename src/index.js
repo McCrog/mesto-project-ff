@@ -6,6 +6,9 @@ import cardOneImage from './images/card_1.jpg';
 import cardTwoImage from './images/card_2.jpg';
 import cardThreeImage from './images/card_3.jpg';
 
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
 
@@ -48,7 +51,16 @@ function showCards() {
 showCards();
 
 profileEditButton.addEventListener('click', () => {
-  popup.show(popupTypeEdit);
+  popup.showEdit(
+    popupTypeEdit,
+    profileTitle.textContent,
+    profileDescription.textContent,
+    (newData) => {
+      console.log(newData);
+      profileTitle.textContent = newData.name;
+      profileDescription.textContent = newData.job;
+    },
+  );
 });
 
 profileAddButton.addEventListener('click', () => {
