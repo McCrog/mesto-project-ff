@@ -1,5 +1,6 @@
 import './pages/index.css';
 import { initialCards } from './cards.js';
+import { popup } from './popup.js';
 
 import cardOneImage from './images/card_1.jpg';
 import cardTwoImage from './images/card_2.jpg';
@@ -14,7 +15,6 @@ const placesList = document.querySelector('.places__list');
 const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 const popupTypeImage = document.querySelector('.popup_type_image');
-const POPUP_IS_OPENED_CLASS = 'popup_is-opened';
 
 function createCard(cardItem, deleteCardCallback) {
   const card = cardTemplate.cloneNode(true);
@@ -41,37 +41,9 @@ function showCards() {
 showCards();
 
 profileEditButton.addEventListener('click', () => {
-  showPopup(popupTypeEdit);
+  popup.show(popupTypeEdit);
 });
 
 profileAddButton.addEventListener('click', () => {
-  showPopup(popupTypeNewCard);
+  popup.show(popupTypeNewCard);
 });
-
-function showPopup(popupElement) {
-  popupElement.classList.add(POPUP_IS_OPENED_CLASS);
-
-  const popupClose = popupElement.querySelector('.popup__close');
-  popupClose.addEventListener('click', handlePopupCloseClick);
-  document.addEventListener('click', handleOverlayClick);
-  document.addEventListener('keydown', handleEscapeKeyDown);
-
-  function handlePopupCloseClick() {
-    popupClose.removeEventListener('click', handlePopupCloseClick);
-    document.removeEventListener('click', handleOverlayClick);
-    document.removeEventListener('keydown', handleEscapeKeyDown);
-    popupElement.classList.remove(POPUP_IS_OPENED_CLASS);
-  }
-
-  function handleEscapeKeyDown(evt) {
-    if (evt.key === 'Escape') {
-      handlePopupCloseClick();
-    }
-  }
-
-  function handleOverlayClick(evt) {
-    if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-      handlePopupCloseClick();
-    }
-  }
-}
