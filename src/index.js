@@ -1,6 +1,6 @@
 import './pages/index.css';
-import { initialCards } from './cards.js';
-import { popup } from './popup.js';
+import { initialCards } from './components/cards.js';
+import { popup } from './components/popup.js';
 
 import cardOneImage from './images/card_1.jpg';
 import cardTwoImage from './images/card_2.jpg';
