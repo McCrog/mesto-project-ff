@@ -59,6 +59,26 @@ const popup = (function () {
         evt.preventDefault();
         updateDataCallback({ name: nameInput.value, job: jobInput.value });
         formElement.removeEventListener('submit', handleFormSubmit);
+        formElement.reset();
+        handlePopupClose();
+      }
+
+      this.show(_popupElement);
+    },
+    showAdd: function (popupElement, updateDataCallback) {
+      _popupElement = popupElement;
+      const formElement = _popupElement.querySelector('.popup__form');
+      const nameInput = _popupElement.querySelector(
+        '.popup__input_type_card-name',
+      );
+      const linkInput = _popupElement.querySelector('.popup__input_type_url');
+      formElement.addEventListener('submit', handleFormSubmit);
+
+      function handleFormSubmit(evt) {
+        evt.preventDefault();
+        updateDataCallback({ name: nameInput.value, link: linkInput.value });
+        formElement.removeEventListener('submit', handleFormSubmit);
+        formElement.reset();
         handlePopupClose();
       }
 

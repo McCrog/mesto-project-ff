@@ -42,9 +42,17 @@ function deleteCard(event) {
   event.target.closest('.card').remove();
 }
 
+function addCard(cardItem, isPrepend) {
+  if (isPrepend) {
+    placesList.prepend(createCard(cardItem, deleteCard));
+  } else {
+    placesList.append(createCard(cardItem, deleteCard));
+  }
+}
+
 function showCards() {
   initialCards.forEach((cardItem) => {
-    placesList.append(createCard(cardItem, deleteCard));
+    addCard(cardItem, false);
   });
 }
 
@@ -56,7 +64,6 @@ profileEditButton.addEventListener('click', () => {
     profileTitle.textContent,
     profileDescription.textContent,
     (newData) => {
-      console.log(newData);
       profileTitle.textContent = newData.name;
       profileDescription.textContent = newData.job;
     },
@@ -64,5 +71,7 @@ profileEditButton.addEventListener('click', () => {
 });
 
 profileAddButton.addEventListener('click', () => {
-  popup.show(popupTypeNewCard);
+  popup.showAdd(popupTypeNewCard, (newData) => {
+    addCard(newData, true);
+  });
 });
