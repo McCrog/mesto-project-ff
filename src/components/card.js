@@ -1,9 +1,4 @@
-import { initialCards } from './cards.js';
-import { popup } from './modal.js';
-
 const cardTemplate = document.querySelector('#card-template').content;
-const placesList = document.querySelector('.places__list');
-const popupTypeImage = document.querySelector('.popup_type_image');
 
 function createCard(
   cardItem,
@@ -31,24 +26,6 @@ function createCard(
   return card;
 }
 
-function showCards() {
-  initialCards.forEach((cardItem) => {
-    addCard(cardItem, false);
-  });
-}
-
-function addCard(cardItem, isPrepend) {
-  if (isPrepend) {
-    placesList.prepend(
-      createCard(cardItem, deleteCard, likeCard, showImagePopup),
-    );
-  } else {
-    placesList.append(
-      createCard(cardItem, deleteCard, likeCard, showImagePopup),
-    );
-  }
-}
-
 function deleteCard(event) {
   event.target.closest('.card').remove();
 }
@@ -57,13 +34,4 @@ function likeCard(event) {
   event.target.classList.toggle('card__like-button_is-active');
 }
 
-function showImagePopup(evt) {
-  popup.showImage(
-    popupTypeImage,
-    evt.target.title,
-    evt.target.src,
-    evt.target.alt,
-  );
-}
-
-export { showCards, addCard };
+export { createCard, deleteCard, likeCard };
