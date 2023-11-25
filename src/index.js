@@ -72,13 +72,13 @@ modalTypeImage.addEventListener('click', (evt) => {
 });
 
 modalTypeEditClose.addEventListener('click', () => {
-  closeModal(modalTypeEdit, handleModalEscapeKeyDown);
+  closeModal(modalTypeEdit);
 });
 modalTypeNewCardClose.addEventListener('click', () => {
-  closeModal(modalTypeNewCard, handleModalEscapeKeyDown);
+  closeModal(modalTypeNewCard);
 });
 modalTypeImageClose.addEventListener('click', () => {
-  closeModal(modalTypeImage, handleModalEscapeKeyDown);
+  closeModal(modalTypeImage);
 });
 
 function showImageModal(title, src, alt) {
@@ -86,18 +86,18 @@ function showImageModal(title, src, alt) {
   modalTypeImageImage.alt = alt;
   modalTypeImageName.textContent = title;
 
-  openModal(modalTypeImage, handleModalEscapeKeyDown);
+  openModal(modalTypeImage);
 }
 
 profileEditButton.addEventListener('click', () => {
   modalTypeEditNameInput.value = profileTitle.textContent;
   modalTypeEditJobInput.value = profileDescription.textContent;
 
-  openModal(modalTypeEdit, handleModalEscapeKeyDown);
+  openModal(modalTypeEdit);
 });
 
 profileAddButton.addEventListener('click', () => {
-  openModal(modalTypeNewCard, handleModalEscapeKeyDown);
+  openModal(modalTypeNewCard);
 });
 
 setupModalSubmitForm(
@@ -138,19 +138,12 @@ function setupModalSubmitForm(
 
     formElement.reset();
 
-    closeModal(modalElement, handleModalEscapeKeyDown);
-  }
-}
-
-function handleModalEscapeKeyDown(evt) {
-  if (evt.key === 'Escape') {
-    const modalElement = document.querySelector(`.${POPUP_IS_OPENED_CLASS}`);
-    closeModal(modalElement, handleModalEscapeKeyDown);
+    closeModal(modalElement);
   }
 }
 
 function handleModalOverlayClick(evt, modalElement) {
   if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-    closeModal(modalElement, handleModalEscapeKeyDown);
+    closeModal(modalElement);
   }
 }
