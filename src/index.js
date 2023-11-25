@@ -24,7 +24,6 @@ const modalTypeEditNameInput = modalTypeEdit.querySelector(
 const modalTypeEditJobInput = modalTypeEdit.querySelector(
   '.popup__input_type_description',
 );
-const modalTypeEditClose = modalTypeEdit.querySelector(POPUP_CLOSE_SELECTOR);
 
 const modalTypeNewCard = document.querySelector('.popup_type_new-card');
 const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
@@ -33,13 +32,10 @@ const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
 const modalTypeNewCardLinkInput = modalTypeNewCard.querySelector(
   '.popup__input_type_url',
 );
-const modalTypeNewCardClose =
-  modalTypeNewCard.querySelector(POPUP_CLOSE_SELECTOR);
 
 const modalTypeImage = document.querySelector('.popup_type_image');
 const modalTypeImageImage = modalTypeImage.querySelector('.popup__image');
 const modalTypeImageName = modalTypeImage.querySelector('.popup__caption');
-const modalTypeImageClose = modalTypeImage.querySelector(POPUP_CLOSE_SELECTOR);
 
 showCards();
 
@@ -61,26 +57,27 @@ function addCard(cardItem, isPrepend) {
   }
 }
 
-modalTypeEdit.addEventListener('click', handleModalOverlayClick);
-modalTypeNewCard.addEventListener('click', handleModalOverlayClick);
-modalTypeImage.addEventListener('click', handleModalOverlayClick);
-
-modalTypeEditClose.addEventListener('click', () => {
-  closeModal(modalTypeEdit);
-});
-modalTypeNewCardClose.addEventListener('click', () => {
-  closeModal(modalTypeNewCard);
-});
-modalTypeImageClose.addEventListener('click', () => {
-  closeModal(modalTypeImage);
-});
-
 function showImageModal(title, src, alt) {
   modalTypeImageImage.src = src;
   modalTypeImageImage.alt = alt;
   modalTypeImageName.textContent = title;
 
   openModal(modalTypeImage);
+}
+
+[modalTypeEdit, modalTypeNewCard, modalTypeImage].forEach((modal) => {
+  modal.addEventListener('click', handleModalOverlayClick);
+
+  const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
+  modalButtonClose.addEventListener('click', () => {
+    closeModal(modal);
+  });
+});
+
+function handleModalOverlayClick(evt) {
+  if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
+    closeModal(evt.target);
+  }
 }
 
 profileEditButton.addEventListener('click', () => {
@@ -133,11 +130,5 @@ function setupModalSubmitForm(
     formElement.reset();
 
     closeModal(modalElement);
-  }
-}
-
-function handleModalOverlayClick(evt) {
-  if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-    closeModal(evt.target);
   }
 }
