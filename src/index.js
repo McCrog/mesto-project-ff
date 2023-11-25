@@ -91,41 +91,29 @@ profileAddButton.addEventListener('click', () => {
   openModal(modalTypeNewCard);
 });
 
-setupModalSubmitForm(
-  modalTypeEdit,
-  modalTypeEditNameInput,
-  modalTypeEditJobInput,
-  (newData) => {
-    profileTitle.textContent = newData.firstValue;
-    profileDescription.textContent = newData.secondValue;
-  },
-);
+setupModalSubmitForm(modalTypeEdit, () => {
+  profileTitle.textContent = modalTypeEditNameInput.value;
+  profileDescription.textContent = modalTypeEditJobInput.value;
+});
 
-setupModalSubmitForm(
-  modalTypeNewCard,
-  modalTypeNewCardNameInput,
-  modalTypeNewCardLinkInput,
-  (newData) => {
-    addCard({ name: newData.firstValue, link: newData.secondValue }, true);
-  },
-);
+setupModalSubmitForm(modalTypeNewCard, () => {
+  addCard(
+    {
+      name: modalTypeNewCardNameInput.value,
+      link: modalTypeNewCardLinkInput.value,
+    },
+    true,
+  );
+});
 
-function setupModalSubmitForm(
-  modalElement,
-  firstInput,
-  secondInput,
-  updateDataCallback,
-) {
+function setupModalSubmitForm(modalElement, isFormSubmitedCallback) {
   const formElement = modalElement.querySelector('.popup__form');
   formElement.addEventListener('submit', handleFormSubmit);
 
   function handleFormSubmit(evt) {
     evt.preventDefault();
 
-    updateDataCallback({
-      firstValue: firstInput.value,
-      secondValue: secondInput.value,
-    });
+    isFormSubmitedCallback();
 
     formElement.reset();
 
