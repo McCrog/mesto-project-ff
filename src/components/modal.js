@@ -1,16 +1,16 @@
 const POPUP_IS_OPENED_CLASS = 'popup_is-opened';
 
 function openModal(modalElement) {
-  document.addEventListener('keydown', handleModalEscapeKeyDown);
+  document.addEventListener('keydown', handleModalEscapeEvent);
   modalElement.classList.add(POPUP_IS_OPENED_CLASS);
 }
 
 function closeModal(modalElement) {
-  document.removeEventListener('keydown', handleModalEscapeKeyDown);
+  document.removeEventListener('keydown', handleModalEscapeEvent);
   modalElement.classList.remove(POPUP_IS_OPENED_CLASS);
 }
 
-function handleModalEscapeKeyDown(evt) {
+function handleModalEscapeEvent(evt) {
   if (evt.key === 'Escape') {
     const modalElement = document.querySelector(`.${POPUP_IS_OPENED_CLASS}`);
     closeModal(modalElement);

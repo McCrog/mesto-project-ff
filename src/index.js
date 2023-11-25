@@ -66,7 +66,7 @@ function showImageModal(title, src, alt) {
 }
 
 [modalTypeEdit, modalTypeNewCard, modalTypeImage].forEach((modal) => {
-  modal.addEventListener('click', handleModalOverlayClick);
+  modal.addEventListener('mousedown', handleModalOverlayEvent);
 
   const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
   modalButtonClose.addEventListener('click', () => {
@@ -74,7 +74,7 @@ function showImageModal(title, src, alt) {
   });
 });
 
-function handleModalOverlayClick(evt) {
+function handleModalOverlayEvent(evt) {
   if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
     closeModal(evt.target);
   }
