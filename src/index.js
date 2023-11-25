@@ -61,15 +61,9 @@ function addCard(cardItem, isPrepend) {
   }
 }
 
-modalTypeEdit.addEventListener('click', (evt) => {
-  handleModalOverlayClick(evt, modalTypeEdit);
-});
-modalTypeNewCard.addEventListener('click', (evt) => {
-  handleModalOverlayClick(evt, modalTypeNewCard);
-});
-modalTypeImage.addEventListener('click', (evt) => {
-  handleModalOverlayClick(evt, modalTypeImage);
-});
+modalTypeEdit.addEventListener('click', handleModalOverlayClick);
+modalTypeNewCard.addEventListener('click', handleModalOverlayClick);
+modalTypeImage.addEventListener('click', handleModalOverlayClick);
 
 modalTypeEditClose.addEventListener('click', () => {
   closeModal(modalTypeEdit);
@@ -142,8 +136,8 @@ function setupModalSubmitForm(
   }
 }
 
-function handleModalOverlayClick(evt, modalElement) {
+function handleModalOverlayClick(evt) {
   if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-    closeModal(modalElement);
+    closeModal(evt.target);
   }
 }
