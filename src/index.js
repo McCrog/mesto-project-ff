@@ -65,7 +65,7 @@ function showImageModal(title, src, alt) {
   openModal(modalTypeImage);
 }
 
-[modalTypeEdit, modalTypeNewCard, modalTypeImage].forEach((modal) => {
+document.querySelectorAll('.popup').forEach((modal) => {
   modal.addEventListener('mousedown', handleModalOverlayEvent);
 
   const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
