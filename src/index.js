@@ -6,8 +6,14 @@ import {
   openModal,
   closeModal,
 } from './components/modal.js';
+import {
+  validationConfig,
+  enableValidation,
+  clearValidation,
+} from './components/validation.js';
 
 const POPUP_CLOSE_SELECTOR = '.popup__close';
+const POPUP_FORM_SELECTOR = '.popup__form';
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
@@ -18,6 +24,7 @@ const profileAddButton = document.querySelector('.profile__add-button');
 const placesList = document.querySelector('.places__list');
 
 const modalTypeEdit = document.querySelector('.popup_type_edit');
+const modalTypeEditForm = modalTypeEdit.querySelector(POPUP_FORM_SELECTOR);
 const modalTypeEditNameInput = modalTypeEdit.querySelector(
   '.popup__input_type_name',
 );
@@ -26,6 +33,8 @@ const modalTypeEditJobInput = modalTypeEdit.querySelector(
 );
 
 const modalTypeNewCard = document.querySelector('.popup_type_new-card');
+const modalTypeNewCardForm =
+  modalTypeNewCard.querySelector(POPUP_FORM_SELECTOR);
 const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
   '.popup__input_type_card-name',
 );
@@ -84,10 +93,13 @@ profileEditButton.addEventListener('click', () => {
   modalTypeEditNameInput.value = profileTitle.textContent;
   modalTypeEditJobInput.value = profileDescription.textContent;
 
+  clearValidation(modalTypeEditForm, validationConfig);
   openModal(modalTypeEdit);
 });
 
 profileAddButton.addEventListener('click', () => {
+  modalTypeNewCardForm.reset();
+  clearValidation(modalTypeNewCardForm, validationConfig);
   openModal(modalTypeNewCard);
 });
 
@@ -120,3 +132,5 @@ function setupModalSubmitForm(modalElement, isFormSubmitedCallback) {
     closeModal(modalElement);
   }
 }
+
+enableValidation(validationConfig);

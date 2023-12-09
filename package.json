@@ -10,6 +10,8 @@
     "lintfix": "stylelint '**/*.css' --fix",
     "checkAll": "npm run check && npm run lint",
     "fixAll": "npm run format && npm run lintfix",
+    "fixAndUpdate": "npm run fixAll && git add . && git commit --amend --no-edit",
+    "fixAndAdd": "npm run fixAll && git add . && git commit -m 'CHANGE'",
     "fixAndPush": "npm run fixAll && git add . && git commit -m 'prepared for publication' && git push",
     "build": "webpack --mode production",
     "dev": "webpack serve"
