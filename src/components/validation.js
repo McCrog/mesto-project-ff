@@ -21,20 +21,22 @@ function enableValidation(validationConfig) {
   });
 }
 
-function clearValidation(formElement, validationConfig) {
+function clearValidation(formElement, validationConfig, isButtonActive) {
   const inputList = Array.from(
     formElement.querySelectorAll(validationConfig.inputSelector),
   );
 
-  if (hasInvalidInput(inputList)) {
-    const buttonElement = formElement.querySelector(
-      validationConfig.submitButtonSelector,
-    );
+  inputList.forEach((inputElement) => {
+    hideInputError(formElement, inputElement, validationConfig);
+  });
 
-    inputList.forEach((inputElement) => {
-      hideInputError(formElement, inputElement, validationConfig);
-    });
+  const buttonElement = formElement.querySelector(
+    validationConfig.submitButtonSelector,
+  );
 
+  if (isButtonActive) {
+    activateButton(buttonElement, validationConfig);
+  } else {
     disableButton(buttonElement, validationConfig);
   }
 }
@@ -50,8 +52,7 @@ function setEventListeners(formElement, validationConfig) {
   toggleButtonState(inputList, buttonElement, validationConfig);
 
   inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', (evt) => {
-      console.log(evt.target.value);
+    inputElement.addEventListener('input', () => {
       checkInputValidity(formElement, inputElement, validationConfig);
       toggleButtonState(inputList, buttonElement, validationConfig);
     });
@@ -62,9 +63,18 @@ function toggleButtonState(inputList, buttonElement, validationConfig) {
   if (hasInvalidInput(inputList)) {
     disableButton(buttonElement, validationConfig);
   } else {
-    buttonElement.disabled = false;
-    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+    activateButton(buttonElement, validationConfig);
   }
+}
+
+function disableButton(buttonElement, validationConfig) {
+  buttonElement.disabled = true;
+  buttonElement.classList.add(validationConfig.inactiveButtonClass);
+}
+
+function activateButton(buttonElement, validationConfig) {
+  buttonElement.disabled = false;
+  buttonElement.classList.remove(validationConfig.inactiveButtonClass);
 }
 
 function hasInvalidInput(inputList) {
@@ -109,11 +119,6 @@ function hideInputError(formElement, inputElement, validationConfig) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   errorElement.classList.remove(validationConfig.errorClass);
   errorElement.textContent = '';
-}
-
-function disableButton(buttonElement, validationConfig) {
-  buttonElement.disabled = true;
-  buttonElement.classList.add(validationConfig.inactiveButtonClass);
 }
 
 export { validationConfig, enableValidation, clearValidation };

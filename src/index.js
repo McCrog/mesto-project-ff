@@ -1,6 +1,12 @@
+// #region imports
+
 import './pages/index.css';
-import { createCard, deleteCard, likeCard } from './components/card.js';
-import { initialCards } from './components/cards.js';
+import {
+  CARD_SELECTOR,
+  CARD_LIKES_COUNT_SELECTOR,
+  CARD_LIKE_BUTTON_ACTIVE_CLASS,
+  createCard,
+} from './components/card.js';
 import {
   POPUP_IS_OPENED_CLASS,
   openModal,
@@ -11,25 +17,56 @@ import {
   enableValidation,
   clearValidation,
 } from './components/validation.js';
+import {
+  getInitialCardsRequest,
+  addCardRequest,
+  deleteCardRequest,
+  addCardLikeRequest,
+  removeCardLikeRequest,
+  getInitialProfileRequest,
+  updateProfileRequest,
+  updateProfileAvatarRequest,
+} from './components/api.js';
+
+// #endregion imports
+
+// #region variables
 
 const POPUP_CLOSE_SELECTOR = '.popup__close';
 const POPUP_FORM_SELECTOR = '.popup__form';
+const POPUP_INPUT_TYPE_URL_SELECTOR = '.popup__input_type_url';
+const POPUP_BUTTON_SELECTOR = '.popup__button';
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+const profileImage = document.querySelector('.profile__image');
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
 
 const placesList = document.querySelector('.places__list');
 
-const modalTypeEdit = document.querySelector('.popup_type_edit');
-const modalTypeEditForm = modalTypeEdit.querySelector(POPUP_FORM_SELECTOR);
-const modalTypeEditNameInput = modalTypeEdit.querySelector(
+const modalTypeEditAvatar = document.querySelector('.popup_type_edit-avatar');
+const modalTypeEditAvatarForm =
+  modalTypeEditAvatar.querySelector(POPUP_FORM_SELECTOR);
+const modalTypeEditAvatarLinkInput = modalTypeEditAvatar.querySelector(
+  POPUP_INPUT_TYPE_URL_SELECTOR,
+);
+const modalTypeEditAvatarSubmitButton = modalTypeEditAvatar.querySelector(
+  POPUP_BUTTON_SELECTOR,
+);
+
+const modalTypeEditProfile = document.querySelector('.popup_type_edit');
+const modalTypeEditProfileForm =
+  modalTypeEditProfile.querySelector(POPUP_FORM_SELECTOR);
+const modalTypeEditProfileNameInput = modalTypeEditProfile.querySelector(
   '.popup__input_type_name',
 );
-const modalTypeEditJobInput = modalTypeEdit.querySelector(
+const modalTypeEditProfileJobInput = modalTypeEditProfile.querySelector(
   '.popup__input_type_description',
+);
+const modalTypeEditProfileSubmitButton = modalTypeEditProfile.querySelector(
+  POPUP_BUTTON_SELECTOR,
 );
 
 const modalTypeNewCard = document.querySelector('.popup_type_new-card');
@@ -39,34 +76,130 @@ const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
   '.popup__input_type_card-name',
 );
 const modalTypeNewCardLinkInput = modalTypeNewCard.querySelector(
-  '.popup__input_type_url',
+  POPUP_INPUT_TYPE_URL_SELECTOR,
+);
+const modalTypeNewCardSubmitButton = modalTypeNewCard.querySelector(
+  POPUP_BUTTON_SELECTOR,
 );
 
 const modalTypeImage = document.querySelector('.popup_type_image');
 const modalTypeImageImage = modalTypeImage.querySelector('.popup__image');
 const modalTypeImageName = modalTypeImage.querySelector('.popup__caption');
 
-showCards();
+let userId = '';
+let profileAvatarLink = '';
+let profileTitleText = '';
+let profileDescriptionText = '';
 
-function showCards() {
+// #endregion variables
+
+Promise.all([getInitialProfileRequest(), getInitialCardsRequest()])
+  .then(([profileResponse, cardsResponse]) => {
+    init(profileResponse, cardsResponse);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+function init(profileResponse, cardsResponse) {
+  userId = profileResponse._id;
+  initProfile(profileResponse);
+  initCards(cardsResponse);
+  enableValidation(validationConfig);
+}
+
+function initProfile(initialProfileResponse) {
+  updateProfileAvatarData(initialProfileResponse.avatar);
+  updateProfileData(initialProfileResponse.name, initialProfileResponse.about);
+}
+
+function updateProfileAvatarData(link) {
+  profileAvatarLink = link;
+
+  updateProfileAvatarContent();
+}
+
+function updateProfileAvatarContent() {
+  profileImage.style.backgroundImage = `url(${profileAvatarLink})`;
+}
+
+function updateEditProfileAvatarModal() {
+  modalTypeEditAvatarLinkInput.value = profileAvatarLink;
+}
+
+function updateProfileData(title, description) {
+  profileTitleText = title;
+  profileDescriptionText = description;
+
+  updateProfileContent();
+}
+
+function updateProfileContent() {
+  profileTitle.textContent = profileTitleText;
+  profileDescription.textContent = profileDescriptionText;
+}
+
+function updateEditProfileModal() {
+  modalTypeEditProfileNameInput.value = profileTitleText;
+  modalTypeEditProfileJobInput.value = profileDescriptionText;
+}
+
+function initCards(initialCards) {
   initialCards.forEach((cardItem) => {
     addCard(cardItem, false);
   });
 }
 
 function addCard(cardItem, isPrepend) {
+  const newCard = createCard(
+    userId,
+    cardItem,
+    deleteCardCallback,
+    likeCardCallback,
+    onCardImageClickCallback,
+  );
+
   if (isPrepend) {
-    placesList.prepend(
-      createCard(cardItem, deleteCard, likeCard, showImageModal),
-    );
+    placesList.prepend(newCard);
   } else {
-    placesList.append(
-      createCard(cardItem, deleteCard, likeCard, showImageModal),
-    );
+    placesList.append(newCard);
   }
 }
 
-function showImageModal(title, src, alt) {
+function deleteCardCallback(event) {
+  const card = event.target.closest(CARD_SELECTOR);
+
+  deleteCardRequest(card.id)
+    .then(() => {
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function likeCardCallback(event) {
+  const cardLikeButton = event.target;
+  const card = cardLikeButton.closest(CARD_SELECTOR);
+  const cardLikesCountElement = card.querySelector(CARD_LIKES_COUNT_SELECTOR);
+  const likeRequest = cardLikeButton.classList.contains(
+    CARD_LIKE_BUTTON_ACTIVE_CLASS,
+  )
+    ? removeCardLikeRequest(card.id)
+    : addCardLikeRequest(card.id);
+
+  likeRequest
+    .then((response) => {
+      cardLikeButton.classList.toggle(CARD_LIKE_BUTTON_ACTIVE_CLASS);
+      cardLikesCountElement.textContent =
+        response.likes.length > 0 ? response.likes.length : '';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function onCardImageClickCallback(title, src, alt) {
   modalTypeImageImage.src = src;
   modalTypeImageImage.alt = alt;
   modalTypeImageName.textContent = title;
@@ -89,48 +222,92 @@ function handleModalOverlayEvent(evt) {
   }
 }
 
-profileEditButton.addEventListener('click', () => {
-  modalTypeEditNameInput.value = profileTitle.textContent;
-  modalTypeEditJobInput.value = profileDescription.textContent;
+profileImage.addEventListener('click', () => {
+  updateEditProfileAvatarModal();
+  clearValidation(modalTypeEditAvatarForm, validationConfig, true);
+  openModal(modalTypeEditAvatar);
+});
 
-  clearValidation(modalTypeEditForm, validationConfig);
-  openModal(modalTypeEdit);
+profileEditButton.addEventListener('click', () => {
+  updateEditProfileModal();
+  clearValidation(modalTypeEditProfileForm, validationConfig, true);
+  openModal(modalTypeEditProfile);
 });
 
 profileAddButton.addEventListener('click', () => {
   modalTypeNewCardForm.reset();
-  clearValidation(modalTypeNewCardForm, validationConfig);
+  clearValidation(modalTypeNewCardForm, validationConfig, false);
   openModal(modalTypeNewCard);
 });
 
-setupModalSubmitForm(modalTypeEdit, () => {
-  profileTitle.textContent = modalTypeEditNameInput.value;
-  profileDescription.textContent = modalTypeEditJobInput.value;
+setupModalSubmitForm(modalTypeEditAvatarForm, () => {
+  updateModalSubmitButtonText(modalTypeEditAvatarSubmitButton, true);
+
+  updateProfileAvatarRequest(modalTypeEditAvatarLinkInput.value)
+    .then((response) => {
+      updateProfileAvatarData(response.avatar);
+      closeModal(modalTypeEditAvatar);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      updateModalSubmitButtonText(modalTypeEditAvatarSubmitButton, false);
+    });
 });
 
-setupModalSubmitForm(modalTypeNewCard, () => {
-  addCard(
-    {
-      name: modalTypeNewCardNameInput.value,
-      link: modalTypeNewCardLinkInput.value,
-    },
-    true,
-  );
+setupModalSubmitForm(modalTypeEditProfileForm, () => {
+  updateModalSubmitButtonText(modalTypeEditProfileSubmitButton, true);
+
+  updateProfileRequest(
+    modalTypeEditProfileNameInput.value,
+    modalTypeEditProfileJobInput.value,
+  )
+    .then((response) => {
+      updateProfileData(response.name, response.about);
+      closeModal(modalTypeEditProfile);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      updateModalSubmitButtonText(modalTypeEditProfileSubmitButton, false);
+    });
 });
 
-function setupModalSubmitForm(modalElement, isFormSubmitedCallback) {
-  const formElement = modalElement.querySelector('.popup__form');
+setupModalSubmitForm(modalTypeNewCardForm, () => {
+  updateModalSubmitButtonText(modalTypeNewCardSubmitButton, true);
+
+  addCardRequest(
+    modalTypeNewCardNameInput.value,
+    modalTypeNewCardLinkInput.value,
+  )
+    .then((response) => {
+      closeModal(modalTypeNewCard);
+      addCard(response, true);
+      modalTypeNewCardForm.reset();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      updateModalSubmitButtonText(modalTypeNewCardSubmitButton, false);
+    });
+});
+
+function setupModalSubmitForm(formElement, isFormSubmitedCallback) {
   formElement.addEventListener('submit', handleFormSubmit);
 
   function handleFormSubmit(evt) {
     evt.preventDefault();
-
     isFormSubmitedCallback();
-
-    formElement.reset();
-
-    closeModal(modalElement);
   }
 }
 
-enableValidation(validationConfig);
+function updateModalSubmitButtonText(buttonElement, isLoading) {
+  if (isLoading) {
+    buttonElement.textContent = 'Сохранение...';
+  } else {
+    buttonElement.textContent = 'Сохранить';
+  }
+}
