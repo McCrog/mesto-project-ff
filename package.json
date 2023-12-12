@@ -14,7 +14,9 @@
     "fixAndAdd": "npm run fixAll && git add . && git commit -m 'CHANGE'",
     "fixAndPush": "npm run fixAll && git add . && git commit -m 'prepared for publication' && git push",
     "build": "webpack --mode production",
-    "dev": "webpack serve"
+    "dev": "webpack serve",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "author": "McCrog",
   "license": "ISC",
@@ -26,6 +28,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.8.1",
     "cssnano": "^6.0.1",
+    "gh-pages": "^6.1.0",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss-loader": "^7.3.3",
