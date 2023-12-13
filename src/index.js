@@ -108,6 +108,8 @@ function init(profileResponse, cardsResponse) {
   enableValidation(validationConfig);
 }
 
+// #region profile
+
 function initProfile(initialProfileResponse) {
   updateProfileAvatarData(initialProfileResponse.avatar);
   updateProfileData(initialProfileResponse.name, initialProfileResponse.about);
@@ -134,6 +136,8 @@ function updateProfileContent() {
   profileTitle.textContent = profileTitleText;
   profileDescription.textContent = profileDescriptionText;
 }
+
+// #endregion profile
 
 // #region cards
 
