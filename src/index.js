@@ -123,10 +123,6 @@ function updateProfileAvatarContent() {
   profileImage.style.backgroundImage = `url(${profileAvatarLink})`;
 }
 
-function updateEditProfileAvatarModal() {
-  modalTypeEditAvatarLinkInput.value = profileAvatarLink;
-}
-
 function updateProfileData(title, description) {
   profileTitleText = title;
   profileDescriptionText = description;
@@ -137,11 +133,6 @@ function updateProfileData(title, description) {
 function updateProfileContent() {
   profileTitle.textContent = profileTitleText;
   profileDescription.textContent = profileDescriptionText;
-}
-
-function updateEditProfileModal() {
-  modalTypeEditProfileNameInput.value = profileTitleText;
-  modalTypeEditProfileJobInput.value = profileDescriptionText;
 }
 
 function initCards(initialCards) {
@@ -222,14 +213,19 @@ function handleModalOverlayEvent(evt) {
   }
 }
 
+// #region open modal
+
 profileImage.addEventListener('click', () => {
-  updateEditProfileAvatarModal();
+  modalTypeEditAvatarLinkInput.value = profileAvatarLink;
+
   clearValidation(modalTypeEditAvatarForm, validationConfig, true);
   openModal(modalTypeEditAvatar);
 });
 
 profileEditButton.addEventListener('click', () => {
-  updateEditProfileModal();
+  modalTypeEditProfileNameInput.value = profileTitleText;
+  modalTypeEditProfileJobInput.value = profileDescriptionText;
+
   clearValidation(modalTypeEditProfileForm, validationConfig, true);
   openModal(modalTypeEditProfile);
 });
@@ -239,6 +235,8 @@ profileAddButton.addEventListener('click', () => {
   clearValidation(modalTypeNewCardForm, validationConfig, false);
   openModal(modalTypeNewCard);
 });
+
+// #endregion open modal
 
 // #region form submit
 
