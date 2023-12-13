@@ -93,6 +93,8 @@ let profileDescriptionText = '';
 
 // #endregion variables
 
+// #region init data
+
 Promise.all([getInitialProfileRequest(), getInitialCardsRequest()])
   .then(([profileResponse, cardsResponse]) => {
     init(profileResponse, cardsResponse);
@@ -107,6 +109,8 @@ function init(profileResponse, cardsResponse) {
   initCards(cardsResponse);
   enableValidation(validationConfig);
 }
+
+// #endregion init data
 
 // #region profile
 
