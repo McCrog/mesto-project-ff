@@ -240,74 +240,90 @@ profileAddButton.addEventListener('click', () => {
   openModal(modalTypeNewCard);
 });
 
-setupModalSubmitForm(modalTypeEditAvatarForm, () => {
-  updateModalSubmitButtonText(modalTypeEditAvatarSubmitButton, true);
+// #region form submit
 
-  updateProfileAvatarRequest(modalTypeEditAvatarLinkInput.value)
-    .then((response) => {
-      updateProfileAvatarData(response.avatar);
-      closeModal(modalTypeEditAvatar);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      updateModalSubmitButtonText(modalTypeEditAvatarSubmitButton, false);
-    });
-});
+modalTypeEditAvatarForm.addEventListener(
+  'submit',
+  handleEditProfileAvatarFormSubmit,
+);
+modalTypeEditProfileForm.addEventListener(
+  'submit',
+  handleEditProfileFormSubmit,
+);
+modalTypeNewCardForm.addEventListener('submit', handleAddCardFormSubmit);
 
-setupModalSubmitForm(modalTypeEditProfileForm, () => {
-  updateModalSubmitButtonText(modalTypeEditProfileSubmitButton, true);
+function handleEditProfileAvatarFormSubmit(evt) {
+  function makeRequest() {
+    return updateProfileAvatarRequest(modalTypeEditAvatarLinkInput.value).then(
+      (response) => {
+        updateProfileAvatarData(response.avatar);
+        closeModal(modalTypeEditAvatar);
+      },
+    );
+  }
 
-  updateProfileRequest(
-    modalTypeEditProfileNameInput.value,
-    modalTypeEditProfileJobInput.value,
-  )
-    .then((response) => {
+  handleFormSubmit(makeRequest, evt);
+}
+
+function handleEditProfileFormSubmit(evt) {
+  function makeRequest() {
+    return updateProfileRequest(
+      modalTypeEditProfileNameInput.value,
+      modalTypeEditProfileJobInput.value,
+    ).then((response) => {
       updateProfileData(response.name, response.about);
       closeModal(modalTypeEditProfile);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      updateModalSubmitButtonText(modalTypeEditProfileSubmitButton, false);
     });
-});
+  }
 
-setupModalSubmitForm(modalTypeNewCardForm, () => {
-  updateModalSubmitButtonText(modalTypeNewCardSubmitButton, true);
+  handleFormSubmit(makeRequest, evt);
+}
 
-  addCardRequest(
-    modalTypeNewCardNameInput.value,
-    modalTypeNewCardLinkInput.value,
-  )
-    .then((response) => {
+function handleAddCardFormSubmit(evt) {
+  function makeRequest() {
+    return addCardRequest(
+      modalTypeNewCardNameInput.value,
+      modalTypeNewCardLinkInput.value,
+    ).then((response) => {
       closeModal(modalTypeNewCard);
       addCard(response, true);
-      modalTypeNewCardForm.reset();
+    });
+  }
+
+  handleFormSubmit(makeRequest, evt);
+}
+
+function handleFormSubmit(request, evt, loadingText = 'Сохранение...') {
+  evt.preventDefault();
+
+  const submitButton = evt.submitter;
+  const initialText = submitButton.textContent;
+
+  renderLoadingButton(true, submitButton, initialText, loadingText);
+
+  request()
+    .then(() => {
+      evt.target.reset();
     })
     .catch((err) => {
-      console.log(err);
+      console.error(`Ошибка: ${err}`);
     })
     .finally(() => {
-      updateModalSubmitButtonText(modalTypeNewCardSubmitButton, false);
+      renderLoadingButton(false, submitButton, initialText);
     });
-});
-
-function setupModalSubmitForm(formElement, isFormSubmitedCallback) {
-  formElement.addEventListener('submit', handleFormSubmit);
-
-  function handleFormSubmit(evt) {
-    evt.preventDefault();
-    isFormSubmitedCallback();
-  }
 }
 
-function updateModalSubmitButtonText(buttonElement, isLoading) {
+function renderLoadingButton(
+  isLoading,
+  buttonElement,
+  initialText = 'Сохранить',
+  loadingText = 'Сохранение...',
+) {
   if (isLoading) {
-    buttonElement.textContent = 'Сохранение...';
+    buttonElement.textContent = loadingText;
   } else {
-    buttonElement.textContent = 'Сохранить';
+    buttonElement.textContent = initialText;
   }
 }
+
+// #endregion form submit
