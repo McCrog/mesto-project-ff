@@ -198,8 +198,14 @@ function onCardImageClickCallback(title, src, alt) {
   openModal(modalTypeImage);
 }
 
+// #region init close modals
+
 document.querySelectorAll('.popup').forEach((modal) => {
-  modal.addEventListener('mousedown', handleModalOverlayEvent);
+  modal.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
+      closeModal(evt.target);
+    }
+  });
 
   const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
   modalButtonClose.addEventListener('click', () => {
@@ -207,11 +213,7 @@ document.querySelectorAll('.popup').forEach((modal) => {
   });
 });
 
-function handleModalOverlayEvent(evt) {
-  if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-    closeModal(evt.target);
-  }
-}
+// #endregion init close modals
 
 // #region open modal
 
