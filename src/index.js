@@ -135,6 +135,8 @@ function updateProfileContent() {
   profileDescription.textContent = profileDescriptionText;
 }
 
+// #region cards
+
 function initCards(initialCards) {
   initialCards.forEach((cardItem) => {
     addCard(cardItem, false);
@@ -197,6 +199,8 @@ function onCardImageClickCallback(title, src, alt) {
 
   openModal(modalTypeImage);
 }
+
+// #endregion cards
 
 // #region init close modals
 
