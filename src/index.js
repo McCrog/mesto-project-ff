@@ -35,7 +35,6 @@ import {
 const POPUP_CLOSE_SELECTOR = '.popup__close';
 const POPUP_FORM_SELECTOR = '.popup__form';
 const POPUP_INPUT_TYPE_URL_SELECTOR = '.popup__input_type_url';
-const POPUP_BUTTON_SELECTOR = '.popup__button';
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
@@ -52,9 +51,6 @@ const modalTypeEditAvatarForm =
 const modalTypeEditAvatarLinkInput = modalTypeEditAvatar.querySelector(
   POPUP_INPUT_TYPE_URL_SELECTOR,
 );
-const modalTypeEditAvatarSubmitButton = modalTypeEditAvatar.querySelector(
-  POPUP_BUTTON_SELECTOR,
-);
 
 const modalTypeEditProfile = document.querySelector('.popup_type_edit');
 const modalTypeEditProfileForm =
@@ -65,9 +61,6 @@ const modalTypeEditProfileNameInput = modalTypeEditProfile.querySelector(
 const modalTypeEditProfileJobInput = modalTypeEditProfile.querySelector(
   '.popup__input_type_description',
 );
-const modalTypeEditProfileSubmitButton = modalTypeEditProfile.querySelector(
-  POPUP_BUTTON_SELECTOR,
-);
 
 const modalTypeNewCard = document.querySelector('.popup_type_new-card');
 const modalTypeNewCardForm =
@@ -77,9 +70,6 @@ const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
 );
 const modalTypeNewCardLinkInput = modalTypeNewCard.querySelector(
   POPUP_INPUT_TYPE_URL_SELECTOR,
-);
-const modalTypeNewCardSubmitButton = modalTypeNewCard.querySelector(
-  POPUP_BUTTON_SELECTOR,
 );
 
 const modalTypeImage = document.querySelector('.popup_type_image');
