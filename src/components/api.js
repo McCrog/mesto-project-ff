@@ -15,75 +15,79 @@ const config = {
   },
 };
 
-const handleResponse = (response) => {
-  if (response.ok) {
-    return response.json();
-  } else {
-    return Promise.reject(`Ошибка: ${response.status}`);
-  }
-};
-
 export const getInitialProfileRequest = () => {
-  return fetch(config.profileUrl(), {
+  return request(config.profileUrl(), {
     headers: config.headers,
-  }).then(handleResponse);
+  });
 };
 
 export const updateProfileAvatarRequest = (avatar) => {
-  return fetch(`${config.profileUrl()}/avatar`, {
+  return request(`${config.profileUrl()}/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       avatar: avatar,
     }),
-  }).then(handleResponse);
+  });
 };
 
 export const updateProfileRequest = (name, about) => {
-  return fetch(config.profileUrl(), {
+  return request(config.profileUrl(), {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       name: name,
       about: about,
     }),
-  }).then(handleResponse);
+  });
 };
 
 export const getInitialCardsRequest = () => {
-  return fetch(config.cardsUrl(), {
+  return request(config.cardsUrl(), {
     headers: config.headers,
-  }).then(handleResponse);
+  });
 };
 
 export const addCardRequest = (name, link) => {
-  return fetch(config.cardsUrl(), {
+  return request(config.cardsUrl(), {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
       name: name,
       link: link,
     }),
-  }).then(handleResponse);
+  });
 };
 
 export const deleteCardRequest = (cardId) => {
-  return fetch(`${config.cardsUrl()}/${cardId}`, {
+  return request(`${config.cardsUrl()}/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  }).then(handleResponse);
+  });
 };
 
 export const addCardLikeRequest = (cardId) => {
-  return fetch(`${config.cardsLikeUrl()}/${cardId}`, {
+  return request(`${config.cardsLikeUrl()}/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
-  }).then(handleResponse);
+  });
 };
 
 export const removeCardLikeRequest = (cardId) => {
-  return fetch(`${config.cardsLikeUrl()}/${cardId}`, {
+  return request(`${config.cardsLikeUrl()}/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  }).then(handleResponse);
+  });
 };
+
+function request(url, options) {
+  return fetch(url, options).then(handleResponse);
+}
+
+function handleResponse(response) {
+  if (response.ok) {
+    return response.json();
+  } else {
+    return Promise.reject(`Ошибка: ${response.status}`);
+  }
+}
