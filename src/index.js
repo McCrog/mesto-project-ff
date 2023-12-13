@@ -76,10 +76,12 @@ const modalTypeImage = document.querySelector('.popup_type_image');
 const modalTypeImageImage = modalTypeImage.querySelector('.popup__image');
 const modalTypeImageName = modalTypeImage.querySelector('.popup__caption');
 
-let userId = '';
-let profileAvatarLink = '';
-let profileTitleText = '';
-let profileDescriptionText = '';
+const profileData = {
+  id: '',
+  avatarLink: '',
+  name: '',
+  about: '',
+};
 
 // #endregion variables
 
@@ -94,7 +96,7 @@ Promise.all([getInitialProfileRequest(), getInitialCardsRequest()])
   });
 
 function init(profileResponse, cardsResponse) {
-  userId = profileResponse._id;
+  profileData.id = profileResponse._id;
   initProfile(profileResponse);
   initCards(cardsResponse);
   enableValidation(validationConfig);
@@ -110,25 +112,25 @@ function initProfile(initialProfileResponse) {
 }
 
 function updateProfileAvatarData(link) {
-  profileAvatarLink = link;
+  profileData.avatarLink = link;
 
   updateProfileAvatarContent();
 }
 
 function updateProfileAvatarContent() {
-  profileImage.style.backgroundImage = `url(${profileAvatarLink})`;
+  profileImage.style.backgroundImage = `url(${profileData.avatarLink})`;
 }
 
 function updateProfileData(title, description) {
-  profileTitleText = title;
-  profileDescriptionText = description;
+  profileData.name = title;
+  profileData.about = description;
 
   updateProfileContent();
 }
 
 function updateProfileContent() {
-  profileTitle.textContent = profileTitleText;
-  profileDescription.textContent = profileDescriptionText;
+  profileTitle.textContent = profileData.name;
+  profileDescription.textContent = profileData.about;
 }
 
 // #endregion profile
@@ -143,7 +145,7 @@ function initCards(initialCards) {
 
 function addCard(cardItem, isPrepend) {
   const newCard = createCard(
-    userId,
+    profileData.id,
     cardItem,
     deleteCardCallback,
     likeCardCallback,
@@ -203,15 +205,15 @@ function onCardImageClickCallback(title, src, alt) {
 // #region init open modals
 
 profileImage.addEventListener('click', () => {
-  modalTypeEditAvatarLinkInput.value = profileAvatarLink;
+  modalTypeEditAvatarLinkInput.value = profileData.avatarLink;
 
   clearValidation(modalTypeEditAvatarForm, validationConfig, true);
   openModal(modalTypeEditAvatar);
 });
 
 profileEditButton.addEventListener('click', () => {
-  modalTypeEditProfileNameInput.value = profileTitleText;
-  modalTypeEditProfileJobInput.value = profileDescriptionText;
+  modalTypeEditProfileNameInput.value = profileData.name;
+  modalTypeEditProfileJobInput.value = profileData.about;
 
   clearValidation(modalTypeEditProfileForm, validationConfig, true);
   openModal(modalTypeEditProfile);
