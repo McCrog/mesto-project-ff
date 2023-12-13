@@ -210,24 +210,7 @@ function onCardImageClickCallback(title, src, alt) {
 
 // #endregion cards
 
-// #region init close modals
-
-document.querySelectorAll('.popup').forEach((modal) => {
-  modal.addEventListener('mousedown', (evt) => {
-    if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
-      closeModal(evt.target);
-    }
-  });
-
-  const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
-  modalButtonClose.addEventListener('click', () => {
-    closeModal(modal);
-  });
-});
-
-// #endregion init close modals
-
-// #region open modal
+// #region init open modals
 
 profileImage.addEventListener('click', () => {
   modalTypeEditAvatarLinkInput.value = profileAvatarLink;
@@ -250,9 +233,26 @@ profileAddButton.addEventListener('click', () => {
   openModal(modalTypeNewCard);
 });
 
-// #endregion open modal
+// #endregion init open modals
 
-// #region form submit
+// #region init close modals
+
+document.querySelectorAll('.popup').forEach((modal) => {
+  modal.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains(POPUP_IS_OPENED_CLASS)) {
+      closeModal(evt.target);
+    }
+  });
+
+  const modalButtonClose = modal.querySelector(POPUP_CLOSE_SELECTOR);
+  modalButtonClose.addEventListener('click', () => {
+    closeModal(modal);
+  });
+});
+
+// #endregion init close modals
+
+// #region forms submit
 
 modalTypeEditAvatarForm.addEventListener(
   'submit',
@@ -338,4 +338,4 @@ function renderLoadingButton(
   }
 }
 
-// #endregion form submit
+// #endregion forms submit
