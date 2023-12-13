@@ -45,36 +45,34 @@ const profileAddButton = document.querySelector('.profile__add-button');
 
 const placesList = document.querySelector('.places__list');
 
-const modalTypeEditAvatar = document.querySelector('.popup_type_edit-avatar');
-const modalTypeEditAvatarForm =
-  modalTypeEditAvatar.querySelector(POPUP_FORM_SELECTOR);
-const modalTypeEditAvatarLinkInput = modalTypeEditAvatar.querySelector(
+const modalEditAvatar = document.querySelector('.popup_type_edit-avatar');
+const modalEditAvatarForm = modalEditAvatar.querySelector(POPUP_FORM_SELECTOR);
+const modalEditAvatarLinkInput = modalEditAvatar.querySelector(
   POPUP_INPUT_TYPE_URL_SELECTOR,
 );
 
-const modalTypeEditProfile = document.querySelector('.popup_type_edit');
-const modalTypeEditProfileForm =
-  modalTypeEditProfile.querySelector(POPUP_FORM_SELECTOR);
-const modalTypeEditProfileNameInput = modalTypeEditProfile.querySelector(
+const modalEditProfile = document.querySelector('.popup_type_edit');
+const modalEditProfileForm =
+  modalEditProfile.querySelector(POPUP_FORM_SELECTOR);
+const modalEditProfileNameInput = modalEditProfile.querySelector(
   '.popup__input_type_name',
 );
-const modalTypeEditProfileJobInput = modalTypeEditProfile.querySelector(
+const modalEditProfileAboutInput = modalEditProfile.querySelector(
   '.popup__input_type_description',
 );
 
-const modalTypeNewCard = document.querySelector('.popup_type_new-card');
-const modalTypeNewCardForm =
-  modalTypeNewCard.querySelector(POPUP_FORM_SELECTOR);
-const modalTypeNewCardNameInput = modalTypeNewCard.querySelector(
+const modalNewCard = document.querySelector('.popup_type_new-card');
+const modalNewCardForm = modalNewCard.querySelector(POPUP_FORM_SELECTOR);
+const modalNewCardNameInput = modalNewCard.querySelector(
   '.popup__input_type_card-name',
 );
-const modalTypeNewCardLinkInput = modalTypeNewCard.querySelector(
+const modalNewCardLinkInput = modalNewCard.querySelector(
   POPUP_INPUT_TYPE_URL_SELECTOR,
 );
 
-const modalTypeImage = document.querySelector('.popup_type_image');
-const modalTypeImageImage = modalTypeImage.querySelector('.popup__image');
-const modalTypeImageName = modalTypeImage.querySelector('.popup__caption');
+const modalImage = document.querySelector('.popup_type_image');
+const modalImageImage = modalImage.querySelector('.popup__image');
+const modalImageName = modalImage.querySelector('.popup__caption');
 
 const profileData = {
   id: '',
@@ -121,9 +119,9 @@ function updateProfileAvatarContent() {
   profileImage.style.backgroundImage = `url(${profileData.avatarLink})`;
 }
 
-function updateProfileData(title, description) {
-  profileData.name = title;
-  profileData.about = description;
+function updateProfileData(name, about) {
+  profileData.name = name;
+  profileData.about = about;
 
   updateProfileContent();
 }
@@ -159,8 +157,8 @@ function addCard(cardItem, isPrepend) {
   }
 }
 
-function deleteCardCallback(event) {
-  const card = event.target.closest(CARD_SELECTOR);
+function deleteCardCallback(evt) {
+  const card = evt.target.closest(CARD_SELECTOR);
 
   deleteCardRequest(card.id)
     .then(() => {
@@ -171,8 +169,8 @@ function deleteCardCallback(event) {
     });
 }
 
-function likeCardCallback(event) {
-  const cardLikeButton = event.target;
+function likeCardCallback(evt) {
+  const cardLikeButton = evt.target;
   const card = cardLikeButton.closest(CARD_SELECTOR);
   const cardLikesCountElement = card.querySelector(CARD_LIKES_COUNT_SELECTOR);
   const likeRequest = cardLikeButton.classList.contains(
@@ -193,11 +191,11 @@ function likeCardCallback(event) {
 }
 
 function onCardImageClickCallback(title, src, alt) {
-  modalTypeImageImage.src = src;
-  modalTypeImageImage.alt = alt;
-  modalTypeImageName.textContent = title;
+  modalImageImage.src = src;
+  modalImageImage.alt = alt;
+  modalImageName.textContent = title;
 
-  openModal(modalTypeImage);
+  openModal(modalImage);
 }
 
 // #endregion cards
@@ -205,24 +203,24 @@ function onCardImageClickCallback(title, src, alt) {
 // #region init open modals
 
 profileImage.addEventListener('click', () => {
-  modalTypeEditAvatarLinkInput.value = profileData.avatarLink;
+  modalEditAvatarLinkInput.value = profileData.avatarLink;
 
-  clearValidation(modalTypeEditAvatarForm, validationConfig, true);
-  openModal(modalTypeEditAvatar);
+  clearValidation(modalEditAvatarForm, validationConfig, true);
+  openModal(modalEditAvatar);
 });
 
 profileEditButton.addEventListener('click', () => {
-  modalTypeEditProfileNameInput.value = profileData.name;
-  modalTypeEditProfileJobInput.value = profileData.about;
+  modalEditProfileNameInput.value = profileData.name;
+  modalEditProfileAboutInput.value = profileData.about;
 
-  clearValidation(modalTypeEditProfileForm, validationConfig, true);
-  openModal(modalTypeEditProfile);
+  clearValidation(modalEditProfileForm, validationConfig, true);
+  openModal(modalEditProfile);
 });
 
 profileAddButton.addEventListener('click', () => {
-  modalTypeNewCardForm.reset();
-  clearValidation(modalTypeNewCardForm, validationConfig, false);
-  openModal(modalTypeNewCard);
+  modalNewCardForm.reset();
+  clearValidation(modalNewCardForm, validationConfig, false);
+  openModal(modalNewCard);
 });
 
 // #endregion init open modals
@@ -246,22 +244,19 @@ document.querySelectorAll('.popup').forEach((modal) => {
 
 // #region forms submit
 
-modalTypeEditAvatarForm.addEventListener(
+modalEditAvatarForm.addEventListener(
   'submit',
   handleEditProfileAvatarFormSubmit,
 );
-modalTypeEditProfileForm.addEventListener(
-  'submit',
-  handleEditProfileFormSubmit,
-);
-modalTypeNewCardForm.addEventListener('submit', handleAddCardFormSubmit);
+modalEditProfileForm.addEventListener('submit', handleEditProfileFormSubmit);
+modalNewCardForm.addEventListener('submit', handleAddCardFormSubmit);
 
 function handleEditProfileAvatarFormSubmit(evt) {
   function makeRequest() {
-    return updateProfileAvatarRequest(modalTypeEditAvatarLinkInput.value).then(
+    return updateProfileAvatarRequest(modalEditAvatarLinkInput.value).then(
       (response) => {
         updateProfileAvatarData(response.avatar);
-        closeModal(modalTypeEditAvatar);
+        closeModal(modalEditAvatar);
       },
     );
   }
@@ -272,11 +267,11 @@ function handleEditProfileAvatarFormSubmit(evt) {
 function handleEditProfileFormSubmit(evt) {
   function makeRequest() {
     return updateProfileRequest(
-      modalTypeEditProfileNameInput.value,
-      modalTypeEditProfileJobInput.value,
+      modalEditProfileNameInput.value,
+      modalEditProfileAboutInput.value,
     ).then((response) => {
       updateProfileData(response.name, response.about);
-      closeModal(modalTypeEditProfile);
+      closeModal(modalEditProfile);
     });
   }
 
@@ -286,10 +281,10 @@ function handleEditProfileFormSubmit(evt) {
 function handleAddCardFormSubmit(evt) {
   function makeRequest() {
     return addCardRequest(
-      modalTypeNewCardNameInput.value,
-      modalTypeNewCardLinkInput.value,
+      modalNewCardNameInput.value,
+      modalNewCardLinkInput.value,
     ).then((response) => {
-      closeModal(modalTypeNewCard);
+      closeModal(modalNewCard);
       addCard(response, true);
     });
   }
