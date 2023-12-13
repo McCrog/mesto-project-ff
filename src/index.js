@@ -16,7 +16,7 @@ import {
   validationConfig,
   enableValidation,
   clearValidation,
-} from './components/validation.js';
+} from './scripts/validation.js';
 import {
   getInitialCardsRequest,
   addCardRequest,
@@ -26,7 +26,7 @@ import {
   getInitialProfileRequest,
   updateProfileRequest,
   updateProfileAvatarRequest,
-} from './components/api.js';
+} from './scripts/api.js';
 
 // #endregion imports
 
