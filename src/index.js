@@ -2,10 +2,9 @@
 
 import './pages/index.css';
 import {
-  CARD_SELECTOR,
-  CARD_LIKES_COUNT_SELECTOR,
   CARD_LIKE_BUTTON_ACTIVE_CLASS,
   createCard,
+  updateLikeButton,
 } from './components/card.js';
 import {
   POPUP_IS_OPENED_CLASS,
@@ -18,14 +17,13 @@ import {
   clearValidation,
 } from './scripts/validation.js';
 import {
-  getInitialCardsRequest,
-  addCardRequest,
-  deleteCardRequest,
-  addCardLikeRequest,
-  removeCardLikeRequest,
   getInitialProfileRequest,
   updateProfileRequest,
   updateProfileAvatarRequest,
+  getInitialCardsRequest,
+  addCardRequest,
+  deleteCardRequest,
+  updateCardLikeRequest,
 } from './scripts/api.js';
 
 // #endregion imports
@@ -69,6 +67,9 @@ const modalNewCardNameInput = modalNewCard.querySelector(
 const modalNewCardLinkInput = modalNewCard.querySelector(
   POPUP_INPUT_TYPE_URL_SELECTOR,
 );
+
+const modalDeleteCard = document.querySelector('.popup_type_delete-card');
+const modalDeleteCardForm = modalDeleteCard.querySelector(POPUP_FORM_SELECTOR);
 
 const modalImage = document.querySelector('.popup_type_image');
 const modalImageImage = modalImage.querySelector('.popup__image');
@@ -157,33 +158,35 @@ function addCard(cardItem, isPrepend) {
   }
 }
 
-function deleteCardCallback(evt) {
-  const card = evt.target.closest(CARD_SELECTOR);
+function deleteCardCallback(cardId, cardElement) {
+  modalDeleteCardForm.addEventListener('submit', (evt) =>
+    handleDeleteCardFormSubmit(evt, cardId, cardElement),
+  );
 
-  deleteCardRequest(card.id)
-    .then(() => {
-      card.remove();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  openModal(modalDeleteCard);
 }
 
-function likeCardCallback(evt) {
-  const cardLikeButton = evt.target;
-  const card = cardLikeButton.closest(CARD_SELECTOR);
-  const cardLikesCountElement = card.querySelector(CARD_LIKES_COUNT_SELECTOR);
-  const likeRequest = cardLikeButton.classList.contains(
-    CARD_LIKE_BUTTON_ACTIVE_CLASS,
-  )
-    ? removeCardLikeRequest(card.id)
-    : addCardLikeRequest(card.id);
+function handleDeleteCardFormSubmit(evt, cardId, cardElement) {
+  function makeRequest() {
+    return deleteCardRequest(cardId)
+      .then(() => {
+        cardElement.remove();
+        closeModal(modalDeleteCard);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-  likeRequest
+  handleFormSubmit(makeRequest, evt, 'Удаление...');
+}
+
+function likeCardCallback(cardId, likeButton, likesCountElement) {
+  const isLiked = likeButton.classList.contains(CARD_LIKE_BUTTON_ACTIVE_CLASS);
+
+  updateCardLikeRequest(cardId, isLiked)
     .then((response) => {
-      cardLikeButton.classList.toggle(CARD_LIKE_BUTTON_ACTIVE_CLASS);
-      cardLikesCountElement.textContent =
-        response.likes.length > 0 ? response.likes.length : '';
+      updateLikeButton(likeButton, likesCountElement, response.likes.length);
     })
     .catch((err) => {
       console.log(err);

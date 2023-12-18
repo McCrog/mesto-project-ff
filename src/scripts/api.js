@@ -66,16 +66,9 @@ export const deleteCardRequest = (cardId) => {
   });
 };
 
-export const addCardLikeRequest = (cardId) => {
+export const updateCardLikeRequest = (cardId, isLiked) => {
   return request(`${config.cardsLikeUrl()}/${cardId}`, {
-    method: 'PUT',
-    headers: config.headers,
-  });
-};
-
-export const removeCardLikeRequest = (cardId) => {
-  return request(`${config.cardsLikeUrl()}/${cardId}`, {
-    method: 'DELETE',
+    method: isLiked ? 'PUT' : 'DELETE',
     headers: config.headers,
   });
 };
