@@ -24,6 +24,7 @@ import {
   addCardRequest,
   deleteCardRequest,
   updateCardLikeRequest,
+  handleError,
 } from './scripts/api.js';
 
 // #endregion imports
@@ -90,9 +91,7 @@ Promise.all([getInitialProfileRequest(), getInitialCardsRequest()])
   .then(([profileResponse, cardsResponse]) => {
     init(profileResponse, cardsResponse);
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch(handleError);
 
 function init(profileResponse, cardsResponse) {
   profileData.id = profileResponse._id;
@@ -173,9 +172,7 @@ function handleDeleteCardFormSubmit(evt, cardId, cardElement) {
         cardElement.remove();
         closeModal(modalDeleteCard);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(handleError);
   }
 
   handleFormSubmit(makeRequest, evt, 'Удаление...');
@@ -188,9 +185,7 @@ function likeCardCallback(cardId, likeButton, likesCountElement) {
     .then((response) => {
       updateLikeButton(likeButton, likesCountElement, response.likes.length);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(handleError);
 }
 
 function onCardImageClickCallback(title, src, alt) {
@@ -307,9 +302,7 @@ function handleFormSubmit(request, evt, loadingText = 'Сохранение...')
     .then(() => {
       evt.target.reset();
     })
-    .catch((err) => {
-      console.error(`Ошибка: ${err}`);
-    })
+    .catch(handleError)
     .finally(() => {
       renderLoadingButton(false, submitButton, initialText);
     });

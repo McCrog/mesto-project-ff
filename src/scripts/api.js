@@ -81,6 +81,10 @@ function handleResponse(response) {
   if (response.ok) {
     return response.json();
   } else {
-    return Promise.reject(`Ошибка: ${response.status}`);
+    return Promise.reject(response.status);
   }
+}
+
+export function handleError(error) {
+  console.error(`Ошибка: ${error}`);
 }
