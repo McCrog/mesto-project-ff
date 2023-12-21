@@ -1,4 +1,3 @@
-const CARD_SELECTOR = '.card';
 const CARD_LIKES_COUNT_SELECTOR = '.card__likes-count';
 const CARD_LIKE_BUTTON_ACTIVE_CLASS = 'card__like-button_is-active';
 
