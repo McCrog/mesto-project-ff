@@ -45,10 +45,9 @@ function createCard(
     }
   }
 
-  cardLikeButton.addEventListener(
-    'click',
-    likeCardCallback(cardItem._id, cardLikeButton, cardLikesCountElement),
-  );
+  cardLikeButton.addEventListener('click', () => {
+    likeCardCallback(cardItem._id, cardLikeButton, cardLikesCountElement);
+  });
 
   return card;
 }

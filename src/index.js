@@ -83,6 +83,11 @@ const profileData = {
   about: '',
 };
 
+const cardToDelete = {
+  id: null,
+  element: null,
+};
+
 // #endregion variables
 
 // #region init data
@@ -158,24 +163,10 @@ function addCard(cardItem, isPrepend) {
 }
 
 function deleteCardCallback(cardId, cardElement) {
-  modalDeleteCardForm.addEventListener('submit', (evt) =>
-    handleDeleteCardFormSubmit(evt, cardId, cardElement),
-  );
+  cardToDelete.id = cardId;
+  cardToDelete.element = cardElement;
 
   openModal(modalDeleteCard);
-}
-
-function handleDeleteCardFormSubmit(evt, cardId, cardElement) {
-  function makeRequest() {
-    return deleteCardRequest(cardId)
-      .then(() => {
-        cardElement.remove();
-        closeModal(modalDeleteCard);
-      })
-      .catch(handleError);
-  }
-
-  handleFormSubmit(makeRequest, evt, 'Удаление...');
 }
 
 function likeCardCallback(cardId, likeButton, likesCountElement) {
@@ -248,6 +239,7 @@ modalEditAvatarForm.addEventListener(
 );
 modalEditProfileForm.addEventListener('submit', handleEditProfileFormSubmit);
 modalNewCardForm.addEventListener('submit', handleAddCardFormSubmit);
+modalDeleteCardForm.addEventListener('submit', handleDeleteCardFormSubmit);
 
 function handleEditProfileAvatarFormSubmit(evt) {
   function makeRequest() {
@@ -288,6 +280,22 @@ function handleAddCardFormSubmit(evt) {
   }
 
   handleFormSubmit(makeRequest, evt);
+}
+
+function handleDeleteCardFormSubmit(evt) {
+  function makeRequest() {
+    return deleteCardRequest(cardToDelete.id)
+      .then(() => {
+        cardToDelete.element.remove();
+        cardToDelete.id = null;
+        cardToDelete.element = null;
+
+        closeModal(modalDeleteCard);
+      })
+      .catch(handleError);
+  }
+
+  handleFormSubmit(makeRequest, evt, 'Удаление...');
 }
 
 function handleFormSubmit(request, evt, loadingText = 'Сохранение...') {

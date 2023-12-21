@@ -68,7 +68,7 @@ export const deleteCardRequest = (cardId) => {
 
 export const updateCardLikeRequest = (cardId, isLiked) => {
   return request(`${config.cardsLikeUrl()}/${cardId}`, {
-    method: isLiked ? 'PUT' : 'DELETE',
+    method: isLiked ? 'DELETE' : 'PUT',
     headers: config.headers,
   });
 };
