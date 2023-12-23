@@ -84,8 +84,7 @@ const profileData = {
 };
 
 const cardToDelete = {
-  id: null,
-  element: null,
+  id: undefined,
 };
 
 // #endregion variables
@@ -162,9 +161,8 @@ function addCard(cardItem, isPrepend) {
   }
 }
 
-function deleteCardCallback(cardId, cardElement) {
+function deleteCardCallback(cardId) {
   cardToDelete.id = cardId;
-  cardToDelete.element = cardElement;
 
   openModal(modalDeleteCard);
 }
@@ -286,9 +284,8 @@ function handleDeleteCardFormSubmit(evt) {
   function makeRequest() {
     return deleteCardRequest(cardToDelete.id)
       .then(() => {
-        cardToDelete.element.remove();
-        cardToDelete.id = null;
-        cardToDelete.element = null;
+        document.getElementById(cardToDelete.id).remove();
+        cardToDelete.id = undefined;
 
         closeModal(modalDeleteCard);
       })
